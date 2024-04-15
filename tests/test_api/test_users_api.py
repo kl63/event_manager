@@ -116,3 +116,89 @@ async def test_delete_user_does_not_exist(async_client, token):
     delete_response = await async_client.delete(f"/users/{non_existent_user_id}", headers=headers)
     assert delete_response.status_code == 404
 
+@pytest.mark.asyncio
+async def test_unauthorized_access(async_client):
+    response = await async_client.get("/users/")  # Accessing without authentication
+    assert response.status_code == 401  # Unauthorized
+
+@pytest.mark.asyncio
+async def test_delete_user_invalid_id(async_client, token):
+    invalid_user_id = "invalid_id"  # Invalid UUID format
+    headers = {"Authorization": f"Bearer {token}"}
+    delete_response = await async_client.delete(f"/users/{invalid_user_id}", headers=headers)
+    assert delete_response.status_code == 422  # Unprocessable Entity
+
+@pytest.mark.asyncio
+async def test_update_user_partial_data(async_client, user, token):
+    updated_data = {"email": f"updated_{user.id}@example.com"}
+    headers = {"Authorization": f"Bearer {token}"}
+    response = await async_client.put(f"/users/{user.id}", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["email"] == updated_data["email"]
+
+@pytest.mark.asyncio
+async def test_update_user_invalid_data(async_client, user, token):
+    updated_data = {"email": "notanemail"}  # Invalid email format
+    headers = {"Authorization": f"Bearer {token}"}
+    response = await async_client.put(f"/users/{user.id}", json=updated_data, headers=headers)
+    assert response.status_code == 422  # Unprocessable Entity
+
+#START HERE:
+
+# Example of a test function using the async_client fixture
+@pytest.mark.asyncio
+async def test_create_user(async_client):
+    form_data = {
+        "username": "admin",
+        "password": "secret",
+    }
+    # Login and get the access token
+    token_response = await async_client.post("/token", data=form_data)
+    access_token = token_response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    # Define user data for the test
+    user_data = {
+        "username": "testuser",
+        "email": "test@example.com",
+        "password": "sS#fdasrongPassword123!",
+    }
+
+    # Send a POST request to create a user
+    response = await async_client.post("/users/", json=user_data, headers=headers)
+
+    # Asserts
+    assert response.status_code == 200
+
+# You can similarly refactor other test functions to use the async_client fixture
+@pytest.mark.asyncio
+async def test_retrieve_user(async_client, user, token):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = await async_client.get(f"/users/{user.id}", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["id"] == str(user.id)
+
+# Existing test cases
+
+# New test cases
+
+@pytest.mark.asyncio
+async def test_update_user_nonexistent_user_id(async_client, token):
+    non_existent_user_id = "00000000-0000-0000-0000-000000000000"  # Valid UUID format
+    headers = {"Authorization": f"Bearer {token}"}
+    updated_data = {"email": "updated@example.com"}
+    response = await async_client.put(f"/users/{non_existent_user_id}", json=updated_data, headers=headers)
+    assert response.status_code == 404
+
+@pytest.mark.asyncio
+async def test_list_users_authenticated(async_client, token):
+    headers = {"Authorization": f"Bearer {token}"}
+    response = await async_client.get("/users/", headers=headers)
+    assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_list_users_unauthenticated(async_client):
+    response = await async_client.get("/users/")
+    assert response.status_code == 401
+
+
