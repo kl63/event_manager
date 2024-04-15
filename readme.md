@@ -11,6 +11,7 @@
 - [Issue 4: Create User Incorrect HTTP Sucess Code](https://github.com/kl63/event_manager/issues/7)
 - [Issue 5: Delete User Incorrect HTTP Sucess Code](https://github.com/kl63/event_manager/issues/9)
 - [Issue 6: Increase Coverage Pytest to 90%](https://github.com/kl63/event_manager/issues/11)
+- [Issue 7: Documentations](https://github.com/kl63/event_manager/issues/14)
 
 ## Docker Image:
 
