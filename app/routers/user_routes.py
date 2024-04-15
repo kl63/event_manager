@@ -105,7 +105,7 @@ async def delete_user(user_id: UUID, db: AsyncSession = Depends(get_async_db), t
     success = await UserService.delete(db, user_id)
     if not success:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return Response(status_code=status.HTTP_200_OK)
 
 
 
