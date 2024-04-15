@@ -10,7 +10,7 @@
 - [Issue 3: RefreshTokenRequest Missing Token](https://github.com/kl63/event_manager/issues/5)
 - [Issue 4: Create User Incorrect HTTP Sucess Code](https://github.com/kl63/event_manager/issues/7)
 - [Issue 5: Delete User Incorrect HTTP Sucess Code](https://github.com/kl63/event_manager/issues/9)
-- [Issue 6: Increse Coverage Pytest to 90%](https://github.com/kl63/event_manager/issues/11)
+- [Issue 6: Increase Coverage Pytest to 90%](https://github.com/kl63/event_manager/issues/11)
 
 ## Docker Image:
 
